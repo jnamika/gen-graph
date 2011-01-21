@@ -422,13 +422,13 @@ def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "n:")
     except getopt.GetoptError:
-        print "Usage: gen_graph.py [-n block-length] file ..."
+        print "Usage: %s [-n block-length] file ..." % sys.argv[0]
         sys.exit(0)
     for opt, arg in opts:
         if opt in ("-n"):
             block_length = int(arg)
     if len(args) == 0:
-        print "Usage: gen_graph.py [-n block-length] file ..."
+        print "Usage: %s [-n block-length] file ..." % sys.argv[0]
         sys.exit(0)
 
     s_list = []

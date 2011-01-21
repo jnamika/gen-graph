@@ -1,10 +1,14 @@
 a python code generating and converting labeled graphs
 
+Copyright (c) 2011 Jun Namikawa <jnamika@gmail.com>
+You may use the code for any purpose, with the understanding that it comes with NO WARRANTY OF ANY KIND.
+
+
 How to use:
 
 (1) call on the command-line
 
-    Usage: gen_graph.py [-n block-length] file ...
+    Usage: gengraph.py [-n block-length] file ...
 
 The program displays a minimal labeled graph which generates symbolic sequences in files (a value in round brackets represents the transition probability).
 
@@ -20,7 +24,7 @@ b
 c
 a
 c
-> python gen_graph.py data.txt
+> python gengraph.py data.txt
 digraph mygraph{
 "0" -> "1" [label="a(0.555556)"]
 "0" -> "2" [label="a(0.444444)"]
@@ -48,7 +52,7 @@ Example:
 Python 2.5.2 (r252:60911, Jan 24 2010, 17:44:40) 
 [GCC 4.3.2] on linux2
 Type "help", "copyright", "credits" or "license" for more information.
->>> from gen_graph import *
+>>> from gengraph import *
 >>> graph = [[['a'],[],[],['a','b']],[[],[],['a'],[]],[[],[],[],[]],[['b'],['a'],[],[]]]
 >>> print_labeled_graph(graph)
 digraph mygraph{
