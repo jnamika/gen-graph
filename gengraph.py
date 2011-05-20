@@ -20,7 +20,7 @@ def gen_random_graph(node_size, label_size, gen_edge_rate):
     for m in graph:
         for n in m:
             for i in xrange(label_size):
-                if (gen_edge_rate >= random.random()):
+                if gen_edge_rate >= random.random():
                     n.append(i)
     return graph
 
@@ -36,20 +36,20 @@ def get_label(graph):
 
 
 def _get_terminate_node(graph, terminate_node=None):
-    if (terminate_node == None):
+    if terminate_node == None:
         terminate_node = []
     node_size = len(graph)
     num = 0
     for i in xrange(node_size):
-        if (i not in terminate_node):
+        if i not in terminate_node:
             has_edge = False
             for j in xrange(node_size):
-                if (j not in terminate_node and len(graph[i][j]) > 0):
+                if j not in terminate_node and len(graph[i][j]) > 0:
                     has_edge = True
-            if (not has_edge):
+            if not has_edge:
                 terminate_node.append(i)
                 num = num + 1
-    if (num > 0):
+    if num > 0:
         terminate_node = _get_terminate_node(graph, terminate_node)
     return terminate_node
 
@@ -58,14 +58,14 @@ def gen_nonterminate_graph(graph, node_map=None):
     terminate_node = _get_terminate_node(graph)
     nonterminate_node_size = node_size - len(terminate_node)
     nonterminate_graph = gen_labeled_graph(nonterminate_node_size)
-    if (node_map == None):
+    if node_map == None:
         node_map = [0] * node_size
     I = 0
     for i in xrange(node_size):
-        if (i not in terminate_node):
+        if i not in terminate_node:
             J = 0
             for j in xrange(node_size):
-                if (j not in terminate_node):
+                if j not in terminate_node:
                     for k in graph[i][j]:
                         nonterminate_graph[I][J].append(k)
                     J = J + 1
@@ -79,7 +79,7 @@ def _has_same_labeled_path(terminal_node1, terminal_node2, graph):
     node_size = len(graph)
     for m in graph:
         for i in m[terminal_node1]:
-            if (i in m[terminal_node2]):
+            if i in m[terminal_node2]:
                 return True
     return False
 
@@ -90,7 +90,7 @@ def _make_node_table_of_right_resolving_graph(graph):
     for i in xrange(node_table_size):
         node_table.append([0] * (node_table_size - i))
         for j in xrange(node_table_size - i):
-            if (_has_same_labeled_path(i, i + j + 1, graph)):
+            if _has_same_labeled_path(i, i + j + 1, graph):
                 node_table[i][j] = 1
     return node_table
 
@@ -100,13 +100,13 @@ def _make_subset_node_map(node_table):
     node_map = [-1] * node_size
     codomain_size = 0
     for i in xrange(node_table_size):
-        if (node_map[i] == -1):
+        if node_map[i] == -1:
             node_map[i] = codomain_size
             for j in xrange(node_table_size - i):
-                if (node_table[i][j]):
+                if node_table[i][j]:
                     node_map[i + j + 1] = codomain_size
             codomain_size = codomain_size + 1
-    if (node_map[node_table_size] == -1):
+    if node_map[node_table_size] == -1:
         node_map[node_table_size] = codomain_size
         codomain_size = codomain_size + 1
     return node_map, codomain_size
@@ -114,19 +114,19 @@ def _make_subset_node_map(node_table):
 def _get_subset_node(node_size, node_list, node_map, cardinal_number):
     index = None
     for i in node_list:
-        if (index == None):
+        if index == None:
             index = node_map[i]
-        elif (index != node_map[i]):
+        elif index != node_map[i]:
             index = None
             break
     subset_node = -1
     n = 0
     for i in xrange(node_size):
-        if (node_map[i] == index):
-            if (i in node_list):
+        if node_map[i] == index:
+            if i in node_list:
                 subset_node = subset_node + pow(2, n)
             n = n + 1
-    if (index != None):
+    if index != None:
         for i in xrange(index):
             subset_node = subset_node + cardinal_number[i];
     return subset_node
@@ -139,8 +139,8 @@ def _get_node_list(node_size, subset_node, node_map, cardinal_number):
     subset_node = subset_node + 1
     node_list = []
     for i in xrange(node_size):
-        if (node_map[i] == index):
-            if (subset_node % 2 > 0):
+        if node_map[i] == index:
+            if subset_node % 2 > 0:
                 node_list.append(i)
                 subset_node = subset_node - 1
             subset_node = subset_node / 2
@@ -154,7 +154,7 @@ def _get_terminal_subset_node(initial_subset_node, label, graph, node_map,
     terminal_node_list = []
     for i in initial_node_list:
         for j in xrange(node_size):
-            if (label in graph[i][j]):
+            if label in graph[i][j]:
                 terminal_node_list.append(j)
     return _get_subset_node(node_size, terminal_node_list, node_map,
             cardinal_number)
@@ -180,9 +180,9 @@ def gen_right_resolving_graph(graph):
                     cardinal_number)
         for j in label:
             n = subset_node[j]
-            if (n != -1):
+            if n != -1:
                 for k in label:
-                    if (n == subset_node[k]):
+                    if n == subset_node[k]:
                         right_resolving_graph[i][n].append(k)
                         subset_node[k] = -1
     return right_resolving_graph
@@ -191,17 +191,17 @@ def gen_right_resolving_graph(graph):
 
 def _get_terminal_node(graph, initial_node, label):
     for i in xrange(len(graph)):
-        if (label in graph[initial_node][i]):
+        if label in graph[initial_node][i]:
             return i
     return None
 
 def _marking(node_table, indexI, indexJ, pair):
     node_table_size = len(node_table)
-    if ('X' not in node_table[indexI][indexJ]):
+    if 'X' not in node_table[indexI][indexJ]:
         node_table[indexI][indexJ] = ['X']
         for i in xrange(node_table_size):
             for j in xrange(node_table_size - i):
-                if (pair[indexI][indexJ] in node_table[indexI][indexJ]):
+                if pair[indexI][indexJ] in node_table[indexI][indexJ]:
                     _marking(node_table, i, j, pair)
 
 def _make_node_table_of_minimal_graph(graph): 
@@ -221,15 +221,15 @@ def _make_node_table_of_minimal_graph(graph):
             for k in label:
                 I = _get_terminal_node(graph, i, k)
                 J = _get_terminal_node(graph, i + j + 1, k)
-                if ((I == None and J != None) or (I != None and J == None)):
+                if (I == None and J != None) or (I != None and J == None):
                     node_table[i][j] = []
                     _marking(node_table, i, j, pair)
-                elif (I != J):
-                    if (I > J):
+                elif I != J:
+                    if I > J:
                         tmp = I
                         I = J
                         J = tmp
-                    if ('X' in node_table[I][J-I-1]):
+                    if 'X' in node_table[I][J-I-1]:
                         node_table[i][j] = []
                         _marking(node_table, i, j, pair)
                     else:
@@ -242,13 +242,13 @@ def _make_merged_node_map(node_table):
     node_map = [-1] * node_size
     codomain_size = 0
     for i in xrange(node_table_size):
-        if (node_map[i] == -1):
+        if node_map[i] == -1:
             node_map[i] = codomain_size
             for j in xrange(node_table_size - i):
-                if ('X' not in node_table[i][j]):
+                if 'X' not in node_table[i][j]:
                     node_map[i + j + 1] = codomain_size
             codomain_size = codomain_size + 1
-    if (node_map[node_table_size] == -1):
+    if node_map[node_table_size] == -1:
         node_map[node_table_size] = codomain_size
         codomain_size = codomain_size + 1
     return node_map, codomain_size
@@ -259,7 +259,7 @@ def gen_minimal_graph(graph, node_map=None):
     node_size = len(graph)
     node_table = _make_node_table_of_minimal_graph(graph)
     merged_node_map, minimal_node_size = _make_merged_node_map(node_table)
-    if (node_map == None):
+    if node_map == None:
         node_map = merged_node_map
     else:
         for i in xrange(node_size):
@@ -269,11 +269,11 @@ def gen_minimal_graph(graph, node_map=None):
         for J in xrange(minimal_node_size):
             label = []
             for i in xrange(node_size):
-                if (node_map[i] == I):
+                if node_map[i] == I:
                     for j in xrange(node_size):
-                        if (node_map[j] == J):
+                        if node_map[j] == J:
                             for k in graph[i][j]:
-                                if (k not in label):
+                                if k not in label:
                                     label.append(k)
             for i in label:
                 minimal_graph[I][J].append(i)
@@ -282,9 +282,9 @@ def gen_minimal_graph(graph, node_map=None):
 
 def _add_edge_in_labeled_graph(initial_node, terminal_node, label, graph,
         edge_count, node_count):
-    if (label not in graph[initial_node][terminal_node]):
+    if label not in graph[initial_node][terminal_node]:
         graph[initial_node][terminal_node].append(label)
-    if (not edge_count[initial_node][terminal_node].has_key(label)):
+    if not edge_count[initial_node][terminal_node].has_key(label):
         edge_count[initial_node][terminal_node][label] = 0
     edge_count[initial_node][terminal_node][label] = \
             (edge_count[initial_node][terminal_node][label] + 1)
@@ -326,14 +326,14 @@ def _add_sequence_in_labeled_graph(sequence, block_length,
             tree.append(block)
             _extend_node_size(graph, edge_count, node_count)
         terminal_node = tree.index(block)
-        if (initial_node != None):
+        if initial_node != None:
             _add_edge_in_labeled_graph(initial_node, terminal_node,
                     block[block_length-1], graph, edge_count, node_count)
         initial_node = terminal_node
     return graph, edge_count, node_count
 
 def gen_labeled_graph_from_sequence(sequence, block_length):
-    if (len(sequence) > 0 and isinstance(sequence[0], list)):
+    if len(sequence) > 0 and isinstance(sequence[0], list):
         graph, edge_count, node_count = None, None, None
         for s in sequence:
             graph, edge_count, node_count = _add_sequence_in_labeled_graph(s,
@@ -354,7 +354,7 @@ def remove_edge_from_labeled_graph(graph, edge_count, threshold):
             label = [x for x in graph[i][j]]
             for k in label:
                 p = edge_count[i][j][k]/float(sum)
-                if (p <= threshold):
+                if p <= threshold:
                     edge_count[i][j].pop(k)
                     graph[i][j].remove(k)
 
@@ -375,7 +375,7 @@ def convert_trans_count(graph, conv_graph, node_map, edge_count, node_count):
         for j in xrange(node_size):
             J = node_map[j]
             for k in graph[i][j]:
-                if (k in conv_graph[I][J]):
+                if k in conv_graph[I][J]:
                     conv_edge_count[I][J][k] = (conv_edge_count[I][J][k] +
                             edge_count[i][j][k])
         conv_node_count[I] = conv_node_count[I] + node_count[i]
@@ -437,7 +437,7 @@ def main():
         s = []
         s_list.append(s)
         for line in open(file, 'r'):
-            if (p.match(line) == None):
+            if p.match(line) == None:
                 input = line[:-1].split()
                 s.append(input[0])
     if s_list != []:
